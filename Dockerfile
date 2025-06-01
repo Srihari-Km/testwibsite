@@ -1,7 +1,13 @@
-FROM node:20
+# Step 1: Build the app using Node
+FROM node:18-alpine as builder
 WORKDIR /app
-COPY Frontend/package*.json ./
+COPY package*.json ./
 RUN npm install
-COPY Frontend .
-EXPOSE 3000
-CMD ["npm", "start"]
+COPY . .
+RUN npm run build  # This will create a "dist" folder
+
+# Step 2: Serve it using Nginx
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
