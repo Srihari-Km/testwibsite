@@ -1,19 +1,36 @@
-# Step 1: Build the app using Node
-FROM node:20 as builder
+# Stage 1: Build the app using Node
+FROM node:20-alpine as builder
 WORKDIR /app
 
-# Copy only package files and install dependencies
+# Copy package files first (better layer caching)
 COPY Frontend/package*.json ./
-RUN npm install
 
-# Copy rest of the frontend code
+# Install dependencies (clean cache to reduce size)
+RUN npm install && npm cache clean --force
+
+# Copy the rest of the frontend code
 COPY Frontend .
 
-# Build the app
-RUN npx --yes vite build
+# Fix permissions for Vite (if needed)
+RUN chmod +x node_modules/.bin/vite
 
-# Step 2: Serve the app using Nginx
+# Build the app (remove --yes if not needed)
+RUN npx vite build
+
+# Stage 2: Serve the app using Nginx
 FROM nginx:alpine
+
+# Remove default Nginx config
+RUN rm -rf /etc/nginx/conf.d/default.conf
+
+# Copy custom Nginx config (if any)
+# COPY nginx.conf /etc/nginx/conf.d/
+
+# Copy built files from builder
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Expose port 80 (HTTP)
 EXPOSE 80
+
+# Start Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
