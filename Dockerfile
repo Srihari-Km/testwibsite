@@ -5,7 +5,7 @@ COPY Frontend/package*.json ./
 RUN npm install
 RUN chmod +x node_modules/.bin/*
 COPY Frontend ./
-RUN npx run build
+RUN npx vite build
 
 # Step 2: Serve the app using Nginx
 FROM nginx:alpine
