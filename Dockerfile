@@ -2,14 +2,14 @@
 FROM node:20 as builder
 WORKDIR /app
 
-# Install dependencies
+# Copy only package files and install dependencies
 COPY Frontend/package*.json ./
 RUN npm install
 
-# Ensure Vite is executable (but this is optional if npx is used)
+# Copy rest of the frontend code
 COPY Frontend .
 
-# Run build using npx
+# Build the app
 RUN npx --yes vite build
 
 # Step 2: Serve the app using Nginx
