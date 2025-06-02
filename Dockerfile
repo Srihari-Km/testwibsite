@@ -3,6 +3,7 @@ FROM node:20 as builder
 WORKDIR /app
 COPY Frontend/package*.json ./
 RUN npm install
+RUN chmod +x node_modules/.bin/*
 COPY Frontend ./
 RUN npm run build
 
