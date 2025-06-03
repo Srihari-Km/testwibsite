@@ -3,11 +3,11 @@ FROM node:18 AS build
 WORKDIR /app
 
 # Copy and install dependencies
-COPY ./Frontend/package*.json ./
+COPY package*.json ./
 RUN npm install
 
-# Copy source code from Frontend directory
-COPY ./Frontend ./
+# Copy all frontend source code
+COPY . .
 RUN npm run build  # Vite outputs to /app/dist
 
 # Stage 2: Serve using nginx
