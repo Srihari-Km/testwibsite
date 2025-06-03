@@ -2,31 +2,25 @@
 FROM node:18 AS build
 WORKDIR /app
 
-# Set NODE_ENV to development to make sure devDependencies are installed
-ENV NODE_ENV=development
-
-# Copy package.json and package-lock.json for stable installs
+# Install dependencies
 COPY package*.json ./
+RUN npm install
 
-# Install dependencies including devDependencies
-RUN npm ci
-
-# Copy the rest of the source code
+# Copy all source files and build the app
 COPY . .
-
-# Build the React app with Vite
-RUN npm run build
+RUN npm run build  # Vite outputs to /app/dist
 
 # Stage 2: Serve using nginx
 FROM nginx:alpine
 
-# Clean default nginx content
+# Remove default nginx web files
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy built frontend files to nginx directory
+# Copy the Vite build output
 COPY --from=build /app/dist /usr/share/nginx/html
 
+# Expose port 80 for production serving via Nginx
 EXPOSE 80
 
-# Start nginx server
+# Start nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
