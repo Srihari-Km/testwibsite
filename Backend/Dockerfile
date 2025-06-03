@@ -4,11 +4,11 @@ FROM node:18 AS build
 WORKDIR /app
 
 # Copy package files and install dependencies
-COPY ./Backend/package*.json ./
+COPY package*.json ./
 RUN npm install --production
 
 # Copy source code
-COPY ./Backend .
+COPY . .
 
 # Stage 2: Production Image
 FROM node:18-alpine
