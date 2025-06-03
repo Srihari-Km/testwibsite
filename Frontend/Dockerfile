@@ -6,8 +6,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copy all frontend source code
-COPY . .
+# Copy source code (you're already in the frontend directory)
+COPY . ./
 RUN npm run build  # Vite outputs to /app/dist
 
 # Stage 2: Serve using nginx
