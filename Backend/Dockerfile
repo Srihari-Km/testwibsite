@@ -19,7 +19,7 @@ WORKDIR /app
 COPY --from=build /app /app
 
 # Expose the backend port (update if your app uses a different port)
-EXPOSE 8000
+EXPOSE 4000
 
 # Run the server
 CMD ["node", "server.js"]
