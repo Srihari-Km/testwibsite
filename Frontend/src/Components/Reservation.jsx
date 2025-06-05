@@ -18,7 +18,7 @@ const Reservation = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://restaurant-backend:4000/api/v1/reservation/send",
+        "http://13.204.21.240:4000/api/v1/reservation/send",
         { firstName, lastName, email, phone, date, time },
         {
           headers: {
