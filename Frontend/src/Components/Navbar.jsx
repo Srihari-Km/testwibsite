@@ -27,7 +27,7 @@
                 ))
             }
         </div>
-        <button className="menuBtn">ourMENU</button>
+        <button className="menuBtn">MENU</button>
        </div>
        <div className="hamburger" onClick={()=>setShow(!show)}>
         <GiHamburgerMenu/>
